@@ -25,6 +25,6 @@ fn run() -> Result<(), Box<Error>> {
     let config_file = File::open(&params.config)?;
     let config: HashMap<String, String> = serde_json::from_reader(config_file)?;
 
-    let data = generator::generate(&config, &params);
+    generator::generate_and_write(&config, &params);
     Ok(())
 }
