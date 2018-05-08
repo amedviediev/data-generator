@@ -101,5 +101,10 @@ fn generate_email() -> Value {
 }
 
 fn generate_ipv4() -> Value {
-    Value::String("127.0.0.1".to_string())
+    let one: u8 = thread_rng().gen_range(0, 255);
+    let two: u8 = thread_rng().gen_range(0, 255);
+    let three: u8 = thread_rng().gen_range(0, 255);
+    let four: u8 = thread_rng().gen_range(0, 255);
+    let ip = format!("{}.{}.{}.{}", one, two, three, four);
+    Value::String(ip)
 }
