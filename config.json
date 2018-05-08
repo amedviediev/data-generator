@@ -7,7 +7,15 @@
     }
   },
   {
-    "name": "date",
+    "name": "registrationDate",
     "data_type": "Date"
+  },
+  {
+    "name": "age",
+    "data_type": "Number",
+    "number_config": {
+      "min": 18,
+      "max": 110
+    }
   }
 ]

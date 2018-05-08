@@ -8,6 +8,10 @@ use chrono::Utc;
 use std::time::Instant;
 use field::Field;
 use field::DataType;
+use serde_json::Number;
+use serde_json::de::ParserNumber;
+use rand::Rng;
+use rand::thread_rng;
 
 //{"registered":"2017-02-18 10:38:46","ipv6":"9afb:4093:c6b0:9928:8fbb:368a:f9af:3398","ipv4":"192.168.173.69","about":"tempor irure mollit ipum velit sint minim.","company":"Suwanee Insurance","lastName":"Velasquez","firstName":"Ernest","eyeColor":"green","age":18,"balance_raw":"$6.455,05","balance":6455.05,"isActive":true,"index":0,"location":"50.995782,30.470266","id":"0"}
 
@@ -27,6 +31,7 @@ pub fn generate_and_write(config: Vec<Field>, params: &Params) {
             let data = match field.data_type {
                 DataType::String => generate_string(),
                 DataType::Date => generate_date(),
+                DataType::Number => generate_number(field.number_config.min, field.number_config.max),
                 _ => Value::Null
             };
 
@@ -55,4 +60,9 @@ fn generate_string() -> Value {
 fn generate_date() -> Value {
     let data = Utc::now();
     Value::String(data.to_string())
+}
+
+fn generate_number(min: i64, max: i64) -> Value {
+    let data = thread_rng().gen_range(min, max);
+    Value::Number(Number::from(ParserNumber::I64(data)))
 }

@@ -14,12 +14,15 @@ pub struct Field {
     pub string_config: StringConfig,
     #[serde(default)]
     pub date_config: DateConfig,
+    #[serde(default)]
+    pub number_config: NumberConfig
 }
 
 #[derive(Serialize, Deserialize, Debug)]
 pub enum DataType {
     String,
     Date,
+    Number
 }
 
 #[derive(Serialize, Deserialize, Debug, Default)]
@@ -40,4 +43,10 @@ impl Default for DateConfig {
             end: DateTime::from_utc(NaiveDateTime::new(MAX_DATE, NaiveTime::from_hms(23, 59, 59)), Utc)
         }
     }
+}
+
+#[derive(Serialize, Deserialize, Debug, Default)]
+pub struct NumberConfig {
+    pub min: i64,
+    pub max: i64
 }

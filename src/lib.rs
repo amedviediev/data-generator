@@ -5,6 +5,7 @@ extern crate clap;
 extern crate serde;
 extern crate serde_json;
 extern crate chrono;
+extern crate rand;
 
 pub mod cli;
 pub mod generator;
