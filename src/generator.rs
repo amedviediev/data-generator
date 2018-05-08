@@ -14,6 +14,8 @@ use rand::Rng;
 use rand::thread_rng;
 use seed_data;
 use inflector::Inflector;
+use indicatif::ProgressBar;
+use indicatif::ProgressStyle;
 
 //{"registered":"2017-02-18 10:38:46","ipv6":"9afb:4093:c6b0:9928:8fbb:368a:f9af:3398","ipv4":"192.168.173.69","about":"tempor irure mollit ipum velit sint minim.","company":"Suwanee Insurance","lastName":"Velasquez","firstName":"Ernest","eyeColor":"green","age":18,"balance_raw":"$6.455,05","balance":6455.05,"isActive":true,"index":0,"location":"50.995782,30.470266","id":"0"}
 
@@ -28,6 +30,11 @@ pub fn generate_and_write(config: Vec<Field>, params: &Params) {
         .unwrap();
     write!(file, "[");
 
+    let bar = ProgressBar::new(params.number_of_records);
+    bar.set_style(ProgressStyle::default_bar()
+        .template("[{elapsed_precise}] {bar:40.cyan/blue} {pos:>7}/{len:7} {msg}")
+        .progress_chars("##-"));
+
     for iteration in 0..params.number_of_records {
         let mut entry_map: BTreeMap<&String, Value> = BTreeMap::new();
         for field in config.iter() {
@@ -37,8 +44,7 @@ pub fn generate_and_write(config: Vec<Field>, params: &Params) {
                 DataType::Number => generate_number(field.number_config.min, field.number_config.max),
                 DataType::Name => generate_name(),
                 DataType::Email => generate_email(),
-                DataType::IPv4 => generate_ipv4(),
-                _ => Value::Null
+                DataType::IPv4 => generate_ipv4()
             };
 
             entry_map.insert(&field.name, data);
@@ -53,7 +59,9 @@ pub fn generate_and_write(config: Vec<Field>, params: &Params) {
         if iteration < params.number_of_records - 1 {
             write!(file, ",");
         }
+        bar.inc(1);
     }
+    bar.finish();
 
     write!(file, "]");
 

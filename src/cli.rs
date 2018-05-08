@@ -2,7 +2,7 @@ use clap::{Arg, App};
 
 pub struct Params {
     pub config: String,
-    pub number_of_records: i32,
+    pub number_of_records: u64,
     pub output: String,
     pub pretty: bool,
 }
@@ -36,7 +36,7 @@ pub fn parse() -> Params {
         .get_matches();
 
     let config_path = matches.value_of("CONFIG").expect("File not found");
-    let number_of_records: i32 = matches.value_of("NUMBER").unwrap().parse().unwrap_or(0);
+    let number_of_records: u64 = matches.value_of("NUMBER").unwrap().parse().unwrap_or(0);
     let output_path = matches.value_of("OUTPUT").unwrap_or("data.json");
     let pretty = matches.is_present("PRETTY");
 
