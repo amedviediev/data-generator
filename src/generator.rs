@@ -26,7 +26,7 @@ pub fn generate_and_write(config: Vec<Field>, params: &Params) {
         .create(true)
         .open(&params.output)
         .unwrap();
-    writeln!(file, "[");
+    write!(file, "[");
 
     for iteration in 0..params.number_of_records {
         let mut entry_map: BTreeMap<&String, Value> = BTreeMap::new();
@@ -35,39 +35,45 @@ pub fn generate_and_write(config: Vec<Field>, params: &Params) {
                 DataType::Text => generate_text(field.text_config.words),
                 DataType::Date => generate_date(),
                 DataType::Number => generate_number(field.number_config.min, field.number_config.max),
+                DataType::Name => generate_name(),
+                DataType::Email => generate_email(),
+                DataType::IPv4 => generate_ipv4(),
                 _ => Value::Null
             };
 
             entry_map.insert(&field.name, data);
         }
 
-        let record = serde_json::to_writer(&file, &entry_map);
+        if params.pretty {
+            serde_json::to_writer_pretty(&file, &entry_map);
+        } else {
+            serde_json::to_writer(&file, &entry_map);
+        }
 
         if iteration < params.number_of_records - 1 {
-            writeln!(file, ",");
+            write!(file, ",");
         }
     }
 
-    writeln!(file, "");
-    writeln!(file, "]");
+    write!(file, "]");
 
     let elapsed = start.elapsed();
     println!("Generated {} records in {}.{} seconds", params.number_of_records, elapsed.as_secs(), elapsed.subsec_millis());
 }
 
 fn generate_text(words: u32) -> Value {
-    let mut data = "".to_string();
+    let mut text = "".to_string();
     for i in 0..words {
         let mut word = seed_data::WORDS[thread_rng().gen_range(0, seed_data::WORDS.len())].to_string();
         if i == 0 {
             word = word.to_title_case();
         } else {
-            data.push_str(" ");
+            text.push_str(" ");
         }
-        data.push_str(word.as_ref());
+        text.push_str(word.as_ref());
     }
-    data.push_str(".");
-    Value::String(data)
+    text.push_str(".");
+    Value::String(text)
 }
 
 fn generate_date() -> Value {
@@ -78,4 +84,22 @@ fn generate_date() -> Value {
 fn generate_number(min: i64, max: i64) -> Value {
     let data = thread_rng().gen_range(min, max);
     Value::Number(Number::from(ParserNumber::I64(data)))
+}
+
+fn generate_name() -> Value {
+    let mut name = "".to_string();
+    let first_name = seed_data::FIRST_NAMES[thread_rng().gen_range(0, seed_data::FIRST_NAMES.len())];
+    let last_name = seed_data::LAST_NAMES[thread_rng().gen_range(0, seed_data::LAST_NAMES.len())];
+    name.push_str(first_name);
+    name.push_str(" ");
+    name.push_str(last_name);
+    Value::String(name)
+}
+
+fn generate_email() -> Value {
+    Value::String("test@test.com".to_string())
+}
+
+fn generate_ipv4() -> Value {
+    Value::String("127.0.0.1".to_string())
 }

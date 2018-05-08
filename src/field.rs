@@ -22,7 +22,10 @@ pub struct Field {
 pub enum DataType {
     Text,
     Date,
-    Number
+    Number,
+    Name,
+    Email,
+    IPv4
 }
 
 #[derive(Serialize, Deserialize, Debug, Default)]

@@ -7,7 +7,7 @@
     }
   },
   {
-    "name": "registrationDate",
+    "name": "registered",
     "data_type": "Date"
   },
   {
@@ -17,5 +17,17 @@
       "min": 18,
       "max": 110
     }
+  },
+  {
+    "name": "name",
+    "data_type": "Name"
+  },
+  {
+    "name": "email",
+    "data_type": "Email"
+  },
+  {
+    "name": "ipv4",
+    "data_type": "IPv4"
   }
 ]
