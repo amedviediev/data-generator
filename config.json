@@ -1,4 +1,13 @@
-{
-  "name": "string",
-  "date": "date"
-}
+[
+  {
+    "name": "name",
+    "data_type": "String",
+    "string_config": {
+      "length": 10
+    }
+  },
+  {
+    "name": "date",
+    "data_type": "Date"
+  }
+]

@@ -7,7 +7,8 @@ use std::error::Error;
 use std::fs::File;
 use data_generator::cli;
 use data_generator::generator;
-use std::collections::HashMap;
+use data_generator::field::Field;
+
 
 fn main() {
     match run() {
@@ -23,8 +24,8 @@ fn run() -> Result<(), Box<Error>> {
     let params: cli::Params = cli::parse();
 
     let config_file = File::open(&params.config)?;
-    let config: HashMap<String, String> = serde_json::from_reader(config_file)?;
+    let config: Vec<Field> = serde_json::from_reader(config_file)?;
 
-    generator::generate_and_write(&config, &params);
+    generator::generate_and_write(config, &params);
     Ok(())
 }
