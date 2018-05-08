@@ -11,7 +11,7 @@ pub struct Field {
     pub data_type: DataType,
 
     #[serde(default)]
-    pub string_config: StringConfig,
+    pub text_config: TextConfig,
     #[serde(default)]
     pub date_config: DateConfig,
     #[serde(default)]
@@ -20,14 +20,14 @@ pub struct Field {
 
 #[derive(Serialize, Deserialize, Debug)]
 pub enum DataType {
-    String,
+    Text,
     Date,
     Number
 }
 
 #[derive(Serialize, Deserialize, Debug, Default)]
-pub struct StringConfig {
-    pub length: i32
+pub struct TextConfig {
+    pub words: u32
 }
 
 #[derive(Serialize, Deserialize, Debug)]
