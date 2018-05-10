@@ -8,7 +8,11 @@
   },
   {
     "name": "registered",
-    "data_type": "Date"
+    "data_type": "Date",
+    "date_config": {
+      "min_date": "2008-05-10 12:30:43",
+      "max_date": "2018-05-10 12:30:43"
+    }
   },
   {
     "name": "age",

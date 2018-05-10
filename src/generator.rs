@@ -18,6 +18,8 @@ use indicatif::ProgressBar;
 use indicatif::ProgressStyle;
 use names::Generator;
 use names::Name;
+use chrono::DateTime;
+use chrono::NaiveDateTime;
 
 //{"registered":"2017-02-18 10:38:46","ipv6":"9afb:4093:c6b0:9928:8fbb:368a:f9af:3398","ipv4":"192.168.173.69","about":"tempor irure mollit ipum velit sint minim.","company":"Suwanee Insurance","lastName":"Velasquez","firstName":"Ernest","eyeColor":"green","age":18,"balance_raw":"$6.455,05","balance":6455.05,"isActive":true,"index":0,"location":"50.995782,30.470266","id":"0"}
 
@@ -42,7 +44,7 @@ pub fn generate_and_write(config: Vec<Field>, params: &Params) {
         for field in config.iter() {
             let data = match field.data_type {
                 DataType::Text => generate_text(field.text_config.words),
-                DataType::Date => generate_date(),
+                DataType::Date => generate_date(field.date_config.min_date, field.date_config.max_date),
                 DataType::Number => generate_number(field.number_config.min, field.number_config.max),
                 DataType::Name => generate_name(),
                 DataType::Email => generate_email(),
@@ -88,9 +90,14 @@ fn generate_text(words: u32) -> Value {
     Value::String(text)
 }
 
-fn generate_date() -> Value {
-    let data = Utc::now();
-    Value::String(data.to_string())
+fn generate_date(min_date: DateTime<Utc>, max_date: DateTime<Utc>) -> Value {
+    let min_timestamp = min_date.timestamp();
+    let max_timestamp = max_date.timestamp();
+    let random_timestamp = thread_rng().gen_range(min_timestamp, max_timestamp);
+    let naive_datetime = NaiveDateTime::from_timestamp(random_timestamp, 0);
+
+    let date: DateTime<Utc> = DateTime::from_utc(naive_datetime, Utc);
+    Value::String(date.to_string())
 }
 
 fn generate_number(min: i64, max: i64) -> Value {
