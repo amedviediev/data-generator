@@ -51,9 +51,11 @@ pub fn generate_and_write(config: Vec<Field>, params: &Params) {
         }
 
         if params.pretty {
-            serde_json::to_writer_pretty(&file, &entry_map);
+            let mut string = serde_json::to_string_pretty(&entry_map).unwrap();
+            file.write(string.as_bytes());
         } else {
-            serde_json::to_writer(&file, &entry_map);
+            let mut string = serde_json::to_string(&entry_map).unwrap();
+            file.write(string.as_bytes());
         }
 
         if iteration < params.number_of_records - 1 {
