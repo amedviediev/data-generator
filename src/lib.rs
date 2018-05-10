@@ -8,6 +8,7 @@ extern crate chrono;
 extern crate rand;
 extern crate inflector;
 extern crate indicatif;
+extern crate names;
 
 pub mod cli;
 pub mod generator;

@@ -16,6 +16,8 @@ use seed_data;
 use inflector::Inflector;
 use indicatif::ProgressBar;
 use indicatif::ProgressStyle;
+use names::Generator;
+use names::Name;
 
 //{"registered":"2017-02-18 10:38:46","ipv6":"9afb:4093:c6b0:9928:8fbb:368a:f9af:3398","ipv4":"192.168.173.69","about":"tempor irure mollit ipum velit sint minim.","company":"Suwanee Insurance","lastName":"Velasquez","firstName":"Ernest","eyeColor":"green","age":18,"balance_raw":"$6.455,05","balance":6455.05,"isActive":true,"index":0,"location":"50.995782,30.470266","id":"0"}
 
@@ -107,7 +109,11 @@ fn generate_name() -> Value {
 }
 
 fn generate_email() -> Value {
-    Value::String("test@test.com".to_string())
+    let adress = Generator::with_naming(Name::Plain).next().unwrap();
+    let host = seed_data::EMAILS_HOSTS[thread_rng().gen_range(0, seed_data::EMAILS_HOSTS.len())];
+    let tld = seed_data::TLDS[thread_rng().gen_range(0, seed_data::TLDS.len())];
+    let email = format!("{}@{}.{}", adress, host, tld);
+    Value::String(email)
 }
 
 fn generate_ipv4() -> Value {

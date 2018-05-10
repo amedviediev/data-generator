@@ -1,3 +1,7 @@
+pub const EMAILS_HOSTS: &[&str] = &["mail", "somemail", "everymail", "mailbox", "bizmail", "mail4u"];
+
+pub const TLDS: &[&str] = &["org", "net", "com", "biz", "us", "co.uk"];
+
 pub const WORDS: &[&str] = &["laboris", "consequat", "cillum",
     "nisi", "esse", "pariatur", "tempor", "cupidatat", "irure", "officia",
     "quis", "veniam", "sint", "reprehenderit", "non", "lorem", "adipisicing",
